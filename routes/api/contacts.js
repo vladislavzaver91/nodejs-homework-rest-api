@@ -49,20 +49,23 @@ router.post('/', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
-    const { error } = addSchema.validate(name, email, phone);
-    if (error) {
-      throw HttpError(400, "missing fields");
-    };
     const { id } = req.params;
-    const result = await contacts.updateContact(id, name, email, phone);
-    if (!result) {
+    const { name, email, phone } = req.body;
+    if (!name && !email && !phone) {
+      res.status(400).json({ message: "missing fields" });
+    };
+    const renewContact = await contacts.updateContact(id, {
+      name,
+      email,
+      phone,
+    });
+    if (!renewContact) {
       throw HttpError(404, "Not found");
-    }
-    res.json(result);
+    };
+    res.json(renewContact);
   } catch (error) {
     next(error);
-  }
+  };
 });
 
 router.delete('/:id', async (req, res, next) => {
