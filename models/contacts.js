@@ -28,17 +28,13 @@ const addContact = async (data) => {
 
 const updateContact = async (id, data) => {
   const contacts = await listContacts();
-  const updatedContacts = await contacts.map(contact => {
-    if (contact.id === id) {
-      return {
-        ...contact,
-        ...data,
-      };
-    }
-    return contact;
-  });
-  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
-  return updatedContacts;
+  const index = contacts.findIndex(item => item.id === id);
+  if (index === -1) {
+    return null;
+}
+const updatedContact = {...contacts[index], ...data};
+await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+return updatedContact;
 };
 
 const removeContact = async (id) => {
