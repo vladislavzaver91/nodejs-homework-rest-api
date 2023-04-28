@@ -1,15 +1,14 @@
 const { HttpError } = require('../helpers');
 
-const validateBody = schema => {
+const validationRegistration = schema => {
     const func = (req, res, next) => {
         const { error } = schema.validate(req.body);
         if (error) {
-            // next(HttpError(400, "missing required name field"));
-            next(HttpError(400, error.message));
+            next(HttpError(400, "Ошибка от Joi или другой библиотеки валидации"));
         };
         next();
     };
     return func;
 };
 
-module.exports = validateBody;
+module.exports = validationRegistration;
