@@ -52,8 +52,9 @@ const updateContact = async (req, res) => {
 const updateStatusContact = async (req, res) => {
     const { _id: owner } = req.user;
     const { id } = req.params;
-    const filter = { _id: id };
-    const update = { ...req.body, owner };
+    const { favorite } = req.body;
+    const filter = { _id: id, owner};
+    const update = { favorite };
     const options = { new: true };
     const result = await Contact.findOneAndUpdate(filter, update, options);
     if (!result) {
